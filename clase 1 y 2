@@ -1,0 +1,134 @@
+### Git vs. GitHub
+# Git - Es el programa que controla y registra las versiones en tu computadora. (sistema de control de versiones)
+# GitHub - Es donde podemos tener una copia remota y compartida del repositorio. (lugar online donde compartimos/sincronizamos ese repositorio)
+
+# Bash → el lenguaje/intérprete que entiende comandos de la terminal. (NO se escribe)
+# Terminal → el lugar/ventana donde escribís esos comandos.
+# Git → el programa que estás manejando mediante esos comandos.
+
+### 3 lugares
+CARPETA DE TRABAJO --- ÁREA DE PREPARACIÓN --- HISTORIAL
+
+### Carpeta de trabajo
+Es donde están tus archivos y donde vos trabajás normalmente. Por ejemplo:
+
+datos.csv
+analisis.R
+informe.qmd
+
+# Modificás `analisis.R` y Git detecta que cambió.
+
+### Área de preparación — Staging
+# Acá elegís qué cambios querés guardar en la próxima versión. Para eso usamos:
+git add archivo.R
+
+### Commit
+
+git commit -m "agrega análisis de inflación"
+
+# El commit - foto d cambios que decidiste guardar, es una versión registrada de los cambios. El commit registra:
+
+## | Información | Qué significa          |
+| ----------- | ---------------------- |
+| Autor       | quién hizo el cambio   |
+| Fecha       | cuándo lo hizo         |
+| Mensaje     | por qué hizo el cambio |
+| Contenido   | exactamente qué cambió |
+
+
+# Para ver los commits anteriores: git log --oneline
+# Cada commit tiene un identificador. El historial nos permite reconstruir cómo fue evolucionando el trabajo. 
+
+---
+
+### RAMA - BRANCH
+                 → rama x
+                /
+# main ──────────
+                \
+                 → rama y
+```
+
+# La idea es que `main` siga funcionando mientras cada persona trabaja en su propia rama. Por ejemplo:
+
+git switch -c faustina2
+
+# Esto crea una rama llamada `faustina2` y te cambia a esa rama. Trabajar sin modificar directamente `main`.
+# LUEGO PODES:
+
+git switch main
+git merge faustina2
+
+#Esto incorpora los cambios de esa rama a `main`. main = versión estable, branches = trabajo experimental o de cada integrante
+
+
+### conflicto -- dos personas modifican las mismas líneas de un archivo y Git no sabe automáticamente cuál versión conservar.
+# Entonces muestra (ej):
+
+# por ej. faustina hace x=2 y juan x=4
+
+<<<<<<< HEAD
+x = 2
+=======
+x = 4
+>>>>>>> branch de faustina
+# y decidimos cual queda
+
+### GitHub - remoto
+
+# Cuando trabajas en equipo (no alcanza con tener el repositorio solamente en mi compu).
+# GitHub -- repositorio remoto.
+
+# Dos comandos fundamentales:
+
+### `git push` - Sube tus commits a GitHub (publico mis cosas).
+### `git pull` - Trae desde GitHub los cambios que hicieron los demás (actualizo mi compu con lo que hicieron los demás).
+
+
+
+---
+
+### Pull Request - incorporar los cambios de MI rama a otra, pero primero que alguien los revise.
+
+ #La diferencia importante es:
+# merge - incorporar una rama.
+# Pull Request - solicitar/revisar esa incorporación antes de hacerla.
+
+### Q archivos se deben versionar - guardar distintas versiones de ese dato a lo largo del tiempo, para poder saber qué cambió y volver atrás si es necesario.
+
+# Sí se versiona
+* código `.py`
+* código `.R`
+* archivos `.qmd`
+* scripts que obtienen datos;
+* `MANIFIESTO.md`;
+* `decisiones.md`;
+* `requirements.txt`;
+* `renv.lock`.
+
+# No se versiona
+* datos crudos;
+* resultados generados;
+* figuras;
+* tablas de salida;
+* datos personales;
+* contraseñas;
+* claves.
+
+# Lo que se puede regenerar, no se versiona.
+
+#### RESUMEN DE PARCIAL:
+1. **Git** es un sistema de control de versiones.
+2. **GitHub** es un repositorio remoto/compartido donde podemos sincronizar nuestro trabajo.
+3. Un **commit** es una versión registrada de los cambios.
+4. `git add` lleva cambios al **staging area**.
+5. `git commit` guarda esos cambios en el historial.
+6. `git push` sube nuestros commits a GitHub.
+7. `git pull` trae los cambios de GitHub.
+8. Una **branch** permite trabajar en paralelo sin modificar directamente `main`.
+9. Un **merge** incorpora los cambios de una rama a otra.
+10. Un **conflicto** aparece cuando Git no puede decidir automáticamente entre cambios incompatibles y nosotros tenemos que resolverlo.
+
+> **Modificar → `add` → `commit` → `push`**
+mientras que para actualizarte con el equipo:
+> **`pull` → trabajar → `add` → `commit` → `push`**
