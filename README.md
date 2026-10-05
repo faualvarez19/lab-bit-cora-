@@ -169,31 +169,21 @@ Con pandas:
 El resultado queda guardado como un **DataFrame**.
 
 # 6. Data profiling
-
-Es una primera inspección del dataset para entender **qué datos tenemos y en qué estado están**.
-
+Es una primera inspección del dataset para entender qué datos tenemos y en qué estado están.
 Antes de hacer modelos/análisis → revisar estructura y calidad.
 
 ### Dimensiones
 
 `df.shape`
-
-Devuelve:
-
-`(filas, columnas)`
+Devuelve: `(filas, columnas)`
 
 Ejemplo:
-
 `(1000, 15)`
-
-→ 1000 observaciones y 15 variables.
+1000 observaciones y 15 variables.
 
 ### Información de las columnas
-
 `df.info()`
-
 Muestra:
-
 → nombres de columnas  
 → cantidad de valores no nulos  
 → tipo de cada variable  
@@ -202,91 +192,44 @@ Muestra:
 ### Primeras filas
 
 `df.head()`
-
 → permite ver rápidamente cómo está armado el dataset.
-
----
 
 # 7. Unidad de observación
 
 Pregunta fundamental:
-
-**¿Qué representa UNA fila del dataset?**
-
-Ejemplos:
-
-Dataset de personas:
-
-**1 fila → 1 persona**
-
-Dataset de ventas:
-
-**1 fila → 1 venta**
-
-Dataset mensual de empresas:
-
-**1 fila → empresa + mes**
-
-Esto determina cómo interpretar todo el dataset.
-
----
+Qué representa UNA fila del dataset
 
 # 8. Identificador / ID
-
-Variable que debería identificar de forma **única** cada observación.
+Variable que debería identificar de forma única cada observación.
 
 Ejemplo:
-
 `id_cliente`
-
 Para ver cuántos valores distintos hay:
-
 `df["id_cliente"].nunique()`
 
 Si:
-
 cantidad de IDs únicos = cantidad de filas
-
 → probablemente el ID identifica de forma única cada observación.
 
 Si hay menos IDs únicos que filas:
-
 → existen IDs repetidos.
-
----
 
 # 9. Valores faltantes
 
 Para detectarlos:
-
 `df.isnull().sum()`
-
 Devuelve cuántos faltantes tiene cada columna.
-
-Ejemplo:
-
-`edad       0`  
-`ingreso   25`
-
-→ `ingreso` tiene 25 observaciones sin dato.
-
----
 
 # 10. Duplicados
 
 Para detectar filas duplicadas:
-
 `df.duplicated().sum()`
 
 Si devuelve:
-
 `0` → no hay filas duplicadas.
 
 Si devuelve:
-
 `15` → existen 15 filas consideradas duplicadas.
-
----
 
 # Esquema general para revisar un dataset
 
