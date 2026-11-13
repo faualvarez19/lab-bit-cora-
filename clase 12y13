@@ -1,0 +1,80 @@
+## Clase 12 
+
+Analisis de una variable
+Las principales medidas son:
+- media y mediana: medidas de tendencia central.
+- min y max: extremos.
+- desv estandar: dispersion.
+- percentiles: posicion dentro de la distrib.
+
+La varianza muestral: suma de (xi - xmedia) / n - 1
+
+La desv estandar es la raíz cuadrada de esta var
+
+summary(datos$xx)
+mean(datos$xx, na.rm = TRUE)
+sd(datos$xx, na.rm = TRUE)
+
+# Comparaciones entre grupos
+datos %>%
+  group_by(franja) %>%
+  summarise(
+    media = mean(xx, na.rm = TRUE),
+    mediana = median(xx, na.rm = TRUE),
+    n = sum(!is.na(xx))
+  )
+
+
+# Regresion lineal simple
+
+La regresion permite estudiar cómo se relaciona una variable dependiente con una variable explicativa.
+Y = beta1 + beta2 * Xi + ei
+
+- beta1: intercepto (valor esperado de Y cuando X vale cero)
+- beta2: pendiente (cuanto cambia Y en cuando X aumenta 1 uni)
+- \(\varepsilon_i\): error del modelo.
+
+# R² - que proporcion de la variabilidad de Y es explicada por el modelo.
+
+
+## Clase 13 
+
+# Preparación de datos
+
+En Python se utiliza Pandas para manipular los datos y Statsmodels para estimar modelos
+import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.formula.api as sm
+df = pd.read_csv("transito_aire_junio2024.csv")
+
+# Crear variables nuevas
+df["fecha"] = pd.to_datetime(df["fecha"])
+df["hora"] = df["fecha"].dt.hour
+df["hora_pico"] = df["hora"].isin([8, 9, 17, 18])
+
+dsp podemos comparar los promedios:
+df.groupby("hora_pico")["transito"].mean()
+- permite comprobar si las horas definidas como pico realmente tienen un transito mayor.
+
+# Graficos por grupos
+
+df.boxplot(column="pm25", by="hora_pico")
+plt.show()
+Un boxplot permite comparar las distribuciones de PM2.5 entre las horas pico y las otras horas (buscar q es pm25)
+
+# Regresión multiple
+
+Se pueden agregar + variables explicativas:
+Y = beta1 + beta2 * Xi + beta3 * Xii + e
+
+modelo2 = smf.ols(
+    "pm25 ~ transito + hora_pico",   
+    data=df).fit()
+print(modelo2.summary())
+- el coeficiente de transito representa su asociacion con PM2.5 manteniendo constante la variable hora_pico.
+
+# Valor p
+El valor p ayuda a evaluar la evidencia estadistica contra H0.
+
+H0: beta1 = 0
+- Si el valor p es menor que 0,05, se rechaza la H0 al nivel de significacion del 5%.
