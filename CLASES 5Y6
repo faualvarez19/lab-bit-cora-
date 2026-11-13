@@ -1,0 +1,67 @@
+## Clase 5 – Seudocodigo, carga de datos y flujo de analisis
+
+#Programa: secuencia de instrucciones que se ejecutan en determinado orden para obtener un resultado.
+#seudocódigo: escribir la lOgica de un programa sin depender de la sintaxis de un lenguaje específico. 
+# 3 estructuras principales son:
+- Secuencia - instrucciones que se ejecutan una dsps de otra.
+- Condicional - se ejecuta algo dependiendo de si se cumple una condicion.
+- Repeticion - permite ejecutar instrucciones varias veces (PARA, MIENTRAS).
+
+En python:
+temperaturas = [18, 25, 14, 30]for t in temperaturas:    
+if t > 20:        
+print(t)
+
+## Flujo de análisis de datos
+
+library(readr)
+
+df <- read_csv("datos.csv")
+
+dim(df)
+head(df)
+str(df)
+summary(df)
+colSums(is.na(df))
+sum(duplicated(df))
+
+## Limpieza 
+# Los principales problemas que se buscan: valores faltantes, duplicados, tipos incorrectos y valores fuera de rango
+
+df = df.drop_duplicates()
+df = df.dropna(subset=["columna"])df["columna"] = pd.to_numeric(    
+df["columna"], errors="coerce")
+
+# Primero hay que entender porq faltan y si eliminarlos puede afectar el analisis.
+
+## PostgreSQL
+# sistema de gestión de bases de datos relacionales. Permite almacenar información en tablas y consultarla mediante SQL.
+
+Ejemplo:
+SELECT *
+FROM mediciones
+WHERE temperatura > 20;
+
+
+## Clase 6 – Diseño de encuestas y tipos de variables
+
+# Encuestas
+Para obtener INFO mediante preguntas. 
+- cada pregunta debe poder transformarse en columnas de una tabla (si preguntamos edad, la tabla tiene una columna numerica llamada edad, si preguntamos x y puede elegir varios,  crear una columna por alternativa.
+
+Tipos de variables y niveles de medición
+Nominal -	Categorías - sin orden	- Barrio, color
+Ordinal	- Categorías - ordenadas	- Bajo, medio, alto
+Intervalo	- Diferencias medibles, cero no absoluto -	Temperatura °C
+Razón -	Tiene cero absoluto	- Edad, ingresos
+
+Cualitativas (categorías) y cuantitativas (números) - discretas o continuas.
+
+# Valores faltantes
+- Faltante estructural: la pregunta no corresponde por el diseño de la encuesta.
+- No respuesta: la persona debia responder, pero no lo hizo.
+
+# Preferencia declarada y revelada
+- Declarada: lo que una persona dice que prefiere o haria.
+- Revelada: lo que efectivamente hace, observado mediante datos.
+
