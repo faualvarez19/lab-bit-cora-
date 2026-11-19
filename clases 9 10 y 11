@@ -119,3 +119,31 @@ print(respuesta.text)
 Los modelos multimodales pueden recibir imagenes (JPG), como la foto de un ticket (PARCIAL SUBIDO DE EJ LO TIENE)
 - convertir información en datos  que podamos guardar en una tabla.
 
+
+EJERCICIO DE CSV
+
+El CSV tiene dos columnas: `descripcion` y `monto`.
+Contenido del archivo `ticket_gemini.csv`:
+
+descripcion,monto
+LECHE FRESCA DESC. C,18.00
+PAN FRANCES GR.X UN,32.00
+
+CODIGO:
+
+import pandas as pd
+df = pd.read_csv("ticket_gemini.csv")
+print(df)
+total = df["monto"].sum()
+print("Total:", total)
+
+
+RESULTADO:
+             descripcion  monto
+0    LECHE FRESCA DESC. C   18.0
+1     PAN FRANCES GR.X UN   32.0
+
+Total: 50.0
+
+
+
