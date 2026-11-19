@@ -254,6 +254,8 @@ Si devuelve:
 
 #####EJERCICIO DE LA CAJA (CLASE 2 Y 3):
 
+PRACTICO A
+
 (TOOD CODIGO EN PYTHON)
 
 #EJ 1
@@ -430,4 +432,51 @@ df_leido["rigidez"] = pd.Categorical(
     ordered=True
 )
 
+
+
+
+PRACTICO B
+
+#EJ5
+
+import pandas as pd
+
+df = pd.read_csv(
+    "datos/caja_negra_excel.csv",
+    sep=";",
+    decimal=",",
+    encoding="latin-1"
+)
+
+print(df.head())
+print(df.dtypes)
+
+
+##EJ6:
+
+from pathlib import Path
+
+BASE = Path(__file__).parent
+ruta = BASE / "datos" / "caja_negra.csv"
+
+df = pd.read_csv(ruta)
+
+print(df.head())
+```
+
+Por qué una ruta absoluta puede romper el trabajo en equipo? - Porque cada computadora tiene carpetas y nombres de usuario diferentes. 
+
+#EJ7:
+
+import pandas as pd
+
+df = pd.read_csv(
+    "datos/caja_negra_faltantes.csv",
+    na_values=["-99", "s/d", "S/D", "NA"]
+)
+
+print(df.isna().sum())
+print(df["peso_estimado_g"].mean())
+
+La diferencia entre las medias es un problema de programación o de medición? - Es principalmente un problema de medición y documentación. Se utilizó un número para representar un dato faltante, pero si no aclaramos eso, Python lo toma como un valor real.
 
