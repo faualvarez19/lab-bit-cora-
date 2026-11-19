@@ -248,3 +248,186 @@ Si devuelve:
 **¿Hay duplicados?** → `duplicated().sum()`  
 ↓  
 **Recién después → análisis/modelado**
+
+
+
+
+#####EJERCICIO DE LA CAJA (CLASE 2 Y 3):
+
+(TOOD CODIGO EN PYTHON)
+
+#EJ 1
+import pandas as pd
+from pathlib import Path
+
+CARPETA = Path("datos")
+CARPETA.mkdir(parents=True, exist_ok=True)
+
+datos_caja = {
+    "objeto_id": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "textura": ["suave", "rugoso", "poroso", "suave", "rugoso",
+                "suave", "poroso", "rugoso", "suave", "poroso"],
+    "rigidez": ["blando", "rígido", "medio", "blando", "rígido",
+                "rígido", "blando", "medio", "medio", "blando"],
+    "num_aristas": [0, 8, 0, 4, 12, 0, 0, 6, 4, 0],
+    "peso_estimado_g": [45.0, 120.5, 15.0, 85.0, 210.0,
+                        35.0, 18.5, 95.0, 70.0, 22.0],
+    "certeza_observador": [5, 4, 3, 5, 4, 2, 4, 3, 4, 3],
+}
+
+df = pd.DataFrame(datos_caja)
+
+df["textura"] = pd.Categorical(
+    df["textura"],
+    categories=["suave", "rugoso", "poroso"],
+    ordered=False
+)
+
+df["rigidez"] = pd.Categorical(
+    df["rigidez"],
+    categories=["blando", "medio", "rígido"],
+    ordered=True
+)
+
+df["certeza_observador"] = pd.Categorical(
+    df["certeza_observador"],
+    categories=[1, 2, 3, 4, 5],
+    ordered=True
+)
+
+print("EJERCICIO 1")
+print(df.dtypes)
+
+
+#EJ2:
+
+df_roto = df.copy()
+df_roto.loc[0, "peso_estimado_g"] = -12.0
+df_roto.loc[3, "num_aristas"] = -1
+df_roto.loc[7, "objeto_id"] = 1
+
+def validar(datos):
+    problemas = []
+
+    pesos_invalidos = (datos["peso_estimado_g"] <= 0).sum()
+
+    if pesos_invalidos > 0:
+        problemas.append(
+            f"Hay {pesos_invalidos} pesos no positivos"
+        )
+
+    certeza = pd.to_numeric(
+        datos["certeza_observador"].astype(str),
+        errors="coerce"
+    )
+
+    certezas_invalidas = (~certeza.between(1, 5)).sum()
+
+    if certezas_invalidas > 0:
+        problemas.append(
+            f"Hay {certezas_invalidas} valores de certeza fuera de rango"
+        )
+
+    aristas_invalidas = (datos["num_aristas"] < 0).sum()
+
+    if aristas_invalidas > 0:
+        problemas.append(
+            f"Hay {aristas_invalidas} conteos de aristas negativos"
+        )
+
+    ids_repetidos = datos["objeto_id"].duplicated().sum()
+
+    if ids_repetidos > 0:
+        problemas.append(
+            f"Hay {ids_repetidos} identificadores repetidos"
+        )
+
+    return problemas
+
+
+#EJ3:
+
+diccionario = pd.DataFrame([
+    {
+        "variable": "peso_estimado_g",
+        "tipo": "numérica continua",
+        "unidad": "gramos",
+        "instrumento": "estimación táctil del observador, 15 s, sin ver el objeto",
+        "rango_valido": "> 0",
+        "faltante": "vacío",
+    },
+    {
+        "variable": "objeto_id",
+        "tipo": "identificador entero",
+        "unidad": "sin unidad",
+        "instrumento": "asignación de un código único al registrar cada objeto",
+        "rango_valido": "entero positivo y único",
+        "faltante": "no permitido",
+    },
+    {
+        "variable": "textura",
+        "tipo": "categórica nominal",
+        "unidad": "categoría",
+        "instrumento": "exploración táctil durante 15 s, sin ver el objeto",
+        "rango_valido": "suave, rugoso, poroso",
+        "faltante": "vacío",
+    },
+    {
+        "variable": "rigidez",
+        "tipo": "categórica ordinal",
+        "unidad": "categoría",
+        "instrumento": "presión táctil durante 15 s, sin ver el objeto",
+        "rango_valido": "blando < medio < rígido",
+        "faltante": "vacío",
+    },
+    {
+        "variable": "num_aristas",
+        "tipo": "numérica discreta",
+        "unidad": "aristas",
+        "instrumento": "conteo mediante exploración táctil durante 15 s, sin ver el objeto",
+        "rango_valido": "entero mayor o igual a 0",
+        "faltante": "vacío si no se pudo determinar",
+    },
+    {
+        "variable": "certeza_observador",
+        "tipo": "categórica ordinal",
+        "unidad": "escala de 1 a 5",
+        "instrumento": "autoevaluación del observador tras 15 s de exploración sin ver el objeto",
+        "rango_valido": "1, 2, 3, 4, 5",
+        "faltante": "vacío",
+    }
+])
+
+diccionario.to_csv(
+    CARPETA / "diccionario_variables.csv",
+    index=False,
+    encoding="utf-8"
+)
+
+
+#EJ4:
+
+df.to_csv(CARPETA / "caja_negra_mio.csv")
+
+df_leido = pd.read_csv(CARPETA / "caja_negra_mio.csv")
+
+print("\nEJERCICIO 4 - ANTES DE CORREGIR")
+print("Columnas originales:", list(df.columns))
+print("Columnas releídas:", list(df_leido.columns))
+print("Rigidez original:", df["rigidez"].dtype)
+print("Rigidez releída:", df_leido["rigidez"].dtype)
+
+df.to_csv(
+    CARPETA / "caja_negra_mio.csv",
+    index=False
+)
+
+df_leido = pd.read_csv(CARPETA / "caja_negra_mio.csv")
+
+df_leido["rigidez"] = pd.Categorical(
+    df_leido["rigidez"],
+    categories=["blando", "medio", "rígido"],
+    ordered=True
+)
+
+
