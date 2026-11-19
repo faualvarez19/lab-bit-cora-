@@ -1,0 +1,111 @@
+##58)
+
+a) 
+El LEFT JOIN mantiene todas las filas de la tabla de la izquierda VUELOS aunque no encuentre una coincidencia en la tabla aerolineas.
+
+RESULTADO:
+| vuelo | carrier | name |
+| 1 | UA | United Air Lines Inc. |
+| 2 | AA | American Airlines Inc. |
+| 3 | B6 | JetBlue Airways |
+| 4 | UA | United Air Lines Inc. |
+| 5 | DL | NA |
+
+(el vuelo 5 queda con NA porque la aerolínea DL no aparece en la tabla de aerolineas)
+
+b)
+El INNER JOIN conserva las filas que encuentran coincidencia en ambas tablas.
+4 filas
+
+c)
+Se pierde el vuelo 5 porque tiene carrier = DL y ese codigo no aparece en la tabla aerolineas.
+
+
+CODIGO PYTHON
+
+import pandas as pd
+vuelos = pd.DataFrame({
+    "vuelo": [1, 2, 3, 4, 5],
+    "carrier": ["UA", "AA", "B6", "UA", "DL"],
+    "dest": ["IAH", "MIA", "SJU", "ORD", "ATL"],
+    "dep_delay": [2, -4, 33, 0, -6]})
+
+aerolineas = pd.DataFrame({
+    "carrier": ["UA", "AA", "B6"],
+    "name": [
+        "United Air Lines Inc.",
+        "American Airlines Inc.",
+        "JetBlue Airways"
+    ]})
+
+resultado_left = vuelos.merge(
+    aerolineas,
+    on="carrier",
+    how="left"
+
+print(resultado_left[["vuelo", "carrier", "name"]])
+
+resultado_inner = vuelos.merge(
+    aerolineas,
+    on="carrier",
+    how="inner"
+
+
+
+
+#59)
+
+a)
+
+En la tabla vuelos usamos la columna dest y aeropuertos usamos la columna faa
+
+b) 
+| vuelo | dest | name |
+| 1 | IAH | George Bush Intercontinental |
+| 2 | MIA | Miami Intl |
+| 3 | SJU | NA |
+| 4 | ORD | Chicago Ohare Intl |
+| 5 | ATL | Hartsfield Jackson Atlanta Intl |
+
+c) 
+4 filas 
+
+d)
+Si primero unimos vuelos con aerolineas y después con aeropuertos, aparecen dos columnas llamadas name.Una guarda el nombre de la aerolínea y la otra el nombre del aeropuerto.
+
+CODIGO:
+import pandas as pd
+
+vuelos = pd.DataFrame({
+    "vuelo": [1, 2, 3, 4, 5],
+    "carrier": ["UA", "AA", "B6", "UA", "DL"],
+    "dest": ["IAH", "MIA", "SJU", "ORD", "ATL"],
+    "dep_delay": [2, -4, 33, 0, -6]
+})
+
+aeropuertos = pd.DataFrame({
+    "faa": ["IAH", "MIA", "ORD", "ATL"],
+    "name": [
+        "George Bush Intercontinental",
+        "Miami Intl",
+        "Chicago Ohare Intl",
+        "Hartsfield Jackson Atlanta Intl"
+    ]
+})
+
+resultado_left = vuelos.merge(
+    aeropuertos,
+    left_on="dest",
+    right_on="faa",
+    how="left"
+)
+
+print(resultado_left[["vuelo", "dest", "name"]])
+
+resultado_inner = vuelos.merge(
+    aeropuertos,
+    left_on="dest",
+    right_on="faa",
+    how="inner"
+)
+
