@@ -1,0 +1,239 @@
+Diseño de encuestas
+
+Las encuestas sirven para recopilar info estadística sobre una poblacion a traves de preguntas. 
+Para conocer: opiniones, percepciones, preferencias o comportamientos.
+
+#fuentes de datos:
+- Preferencias declaradas: lo que una persona dice que hace o prefiere.
+- Preferencias reveladas: lo que efectivamente hace, observado a traves de sus decisiones (los pagos registrados con tarjeta).
+- Huella digital: info que queda registrada al utilizar apps o sistemas, como clics, ubicaciones o tiempo de uso.
+
+#Diseño de una encuesta
+Diseñar primero la tabla de datos y DESPUES el cuestionario.
+
+- Cada fila representa una obs o persona.
+- Cada columna representa una variable.
+- Cada pregunta tiene que generar una o varias columnas.
+
+#PASOS:
+1. Definir QUE queremos investigar y CUAL es la población.
+2. Identificar los conceptos que queremos medir.
+3. Transformar conceptos en variables.
+4. Definir COMO vamos a codificar las respuestas.
+5. Redactar preguntas.
+6. Ordenarlas y establecer los filtros.
+7. Hacer una prueba piloto.
+8. Aplicar la encuesta y cargar los datos.
+
+tiene que incluir: título, introducción, consentimiento, instrucciones, preguntas y agradecimiento final.
+
+#Proceso de transformar un concepto general en variables que podamos medir.
+
+Concepto → Dimensión → Indicador → Pregunta → Variable
+
+EJ: queremos medir la situación económica de los estudiantes.
+
+#Tipos de variables
+- NOMINAL - cat sin orden
+- ORDINAL - cat con orden
+- INTERVALO - diferencias medibles 
+- RAZON - tiene cero real (edad, gastos)
+- BINARIAS - solo SI O NO, 1 o 0
+
+IMPO: una escala del 1 al 5 sigue siendo ordinal, aunque use numeros. 
+
+#Tipos de preguntas y columnas que generan
+
+- UNICA OPCION = genera una columna. Puede ser nominal u ordinal.
+Ejemplo: cual es su principal fuente de ingresos
+- Sí/No: genera una columna binaria.
+- Numérica directa: genera una columna cuantitativa.  (cuanto gastó en comida en los últimos 30 dias)
+- Numérica por tramos: genera una variable ordinal.(Nada, hasta $1.000, entre $1.000 y x).
+- Selección múltiple: genera una columna binaria por cada opcion.
+- Pregunta abierta: genera una columna de texto.
+
+#redactar correctamente las preguntas
+
+EVITAR:
+- Dos preguntas en una
+- Preguntas inducidas
+- Períodos poco claros
+- Opciones superpuestas
+- Opciones incompletas
+
+#Preguntas filtro y valores faltantes
+Las preguntas filtro permiten determinar si corresponde responder otra pregunta.
+
+EJ:
+Vive en la casa familiar?
+Cuánto paga de alquiler?
+
+Si responde que vive en la casa familiar, puede no corresponder que responda la pregunta del alquiler.
+
+- Faltante estructural: la pregunta no corresponde por el diseño.
+- No respuesta: la persona tenia que responder, pero dejo el campo vacío.
+
+#Validez, confiabilidad y errores
+
+Validez: que la pregunta mida realmente lo que queremos medir.
+Confiabilidad: que la medición sea consistente al repetirla en condiciones similares.
+
+Principales fuentes de error:
+
+- Cobertura: no incluimos a toda la población que queremos estudiar.
+- Muestreo: observamos una muestra y no la población completa.
+- No respuesta: algunas personas no contestan.
+- Medición: las respuestas no reflejan correctamente lo que queremos medir.
+
+#Sesgo por no respuesta
+La fórmula vista en clase es:
+
+Y(r) - Y = m / n * (Y(r) - Y(m))
+
+- n: personas seleccionadas.
+- m: personas que no responden.
+- Y(r): promedio de quienes responden.
+- Y(m): promedio de quienes no responden.
+- Y: promedio de toda la población considerada.
+
+El sesgo depende tanto de la cantidad de personas que no responden como de las diferencias entre quienes responden y quienes no.
+
+#Libro de códigos
+diccionario que describe todas las variables antes de recopilar los datos.
+
+Debe indicar el nombre de cada variable, su tipo, los valores permitidos y cómo se representan los faltantes.
+
+##Declarar variables en Python
+
+```python
+import pandas as pd
+
+encuesta = pd.read_csv("encuesta_gasto.csv")
+
+encuesta["anio"] = pd.Categorical(
+    encuesta["anio"],
+    categories=[1, 2, 3, 4, 5],
+    ordered=True
+)
+
+encuesta["vive_familia"] = (
+    encuesta["vive_familia"] == "Sí"
+)
+
+print(encuesta.dtypes)
+```
+
+#Proteccion de datos personales
+
+En Uruguay = la Ley 18.331 = Protección de Datos Personales.
+
+- Al diseñar una encuesta debemos considerar la finalidad de los datos, el consentimiento, la información necesaria y la seguridad.
+- No deberíamos pedir información personal que no sea necesaria para el análisis.
+- Tener cuidado con los datos sensibles y la identificación de personas. 
+
+
+
+EJERCICIOS DE CLASE 
+##EJ 1
+
+ 1. ¿Está conforme con lo que gasta en comida y en transporte?
+Separar la pregunta en dos:
+- que tan conforme está con lo que gasta en comida?
+- que tan conforme está con lo que gasta en transporte?
+
+En ambas usaría una escala del 1 al 5 (o al 10)
+
+2. ¿No le parece que gasta demasiado en salidas?
+la pregunta induce una respuesta y ademas esta redactada con una negacion.
+
+Corregida - Cuánto dinero gastó en salidas durante los últimos 30 días? - una columna, respuesta en pesos
+
+3. ¿Cuánto gastó últimamente en ropa?
+no tiene un período de referencia claro.
+
+Corregido - Cuánto dinero gastó en ropa durante los últimos 30 días? - una columna, respuesta en pesos
+
+4. Gasto en transporte: $0 a $1.000 / $1.000 a $3.000 / $3.000 a $6.000
+los intervalos se superponen.
+
+Corregida: Cuánto gastó en transporte durante los últimos 30 días? - una columna
+OPCIONES:
+- nada.
+- entre $1 y $1.000.
+- entre $1.001 y $3.000.
+- entre $3.001 y $6.000.
+- + de $6.000.
+
+5. ¿Cómo paga sus gastos? Efectivo / Tarjeta / Ambos / Transferencia
+parece una pregunta de opcion unica pero una persona puede utilizar varios medios de pago. Ambos tmb esta mal.
+
+Corregida -  Qué medios de pago utilizo durante los últimos 30 días? Puede marcar más de una opción. - 3 columnas
+OPCIONES:
+- Efectivo
+- Tarjeta
+- Transferencia
+
+6. ¿Cuál es el ingreso mensual exacto de su hogar? (Primera pregunta)
+
+Corregida - En qué intervalo se encuentra el ingreso mensual total de su hogar? - una columna
+OPCIONES:
+- Hasta $25.000.
+- Entre $25.001 y $50.000.
+- Entre $50.001 y $100.000.
+- Más de $100.000.
+
+---
+
+##EJ 2
+
+1. ¿Con qué frecuencia compró en la cafetería durante los últimos 30 días?
+
+- Nunca.
+- Entre 1 y 3 veces.
+- Entre 4 y 8 veces.
+- Más de 8 veces.
+
+*Filtro:* si responde "Nunca", pasa directamente a la pregunta 5, ya que no corresponde preguntarle qué compró, cómo pagó o cómo fue la atención.
+
+2. ¿Qué productos compró en la cafetería durante los últimos 30 días? Puede marcar más de una opción:
+
+- Café
+- Comida
+- Bebidas otras
+- Otros
+
+3. ¿Cómo calificaría la atención recibida en la cafetería durante los últimos 30 días?
+
+1 = Muy mala
+2 = Mala
+3 = Regular
+4 = Buena
+5 = Muy buena
+
+4. ¿Qué medios de pago utilizó en la cafetería durante los últimos 30 días? Puede marcar más de una opción:
+
+- Efectivo
+- Tarjeta
+- Transferencia
+
+5. ¿Es estudiante de esta facultad?
+
+- Si
+- No
+
+6. ¿Qué mejoraría del servicio de la cafetería?
+
+Respuesta abierta.
+
+7. ¿Cuántos años tiene?
+
+Respuesta numérica.
+
+COLUMNAS:
+La pregunta 1 genera una columna
+La pregunta 2 genera cuatro columnas porque es de selección múltiple.
+La pregunta 3 genera una columna
+La pregunta 4 genera tres columnas porque también es de selección múltiple
+Las preguntas 5, 6 y 7 generan una columna cada una
+El identificador agrega una columna adicional
+Total: 13 columnas
